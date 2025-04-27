@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Portfolio</title>
+  <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script type="module" src="/src/portfolio-sidebar-theme.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body>
+  <portfolio-sidebar-theme>
+    <!-- About Page -->
+    <portfolio-screen screen-title="About Me" screen-id="about">
+      <div class="content">
+        <h1>About Me</h1>
+        <div class="profile-section">
+          <h2>Nick Hadden</h2>
+          <img src="https://via.placeholder.com/200" alt="Profile picture" class="profile-image">
+          <p>Rising Junior and cybersecurity major at Penn State University.</p>
+          <div class="profile-info">
+            <p class="tagline"></p>
+          </div>
+        </div>
+      </div>
+    </portfolio-screen>
+
+    <!-- Projects Page -->
+    <portfolio-screen screen-title="My Projects" screen-id="projects">
+      <div class="content">
+        <h1>My Projects</h1>
+        <div class="projects-list">
+          <h3><a href="https://github.com/nickhadden23/polaris-chip" class="project-link">Polars-Chip</a></h3>
+          <p>I designed multiple Penn State football cards</p>
+          
+          <h3><a href="https://github.com/nickhadden23/project-1-ddd-card-list" class="project-link">DDD-Card-List</a></h3>
+          <p>A replica of the Penn State campus card website</p>
+        </div>
+      </div>
+    </portfolio-screen>
+
+    <!-- Skills Page -->
+    <portfolio-screen screen-title="My Skills" screen-id="skills">
+      <div class="content">
+        <h1>My Skills</h1>
+        <div class="skills-container">
+          <div class="skills-column">
+            <h2>Skills</h2>
+            <ul class="skills-list">
+              <li>SQL</li>
+              <li>JavaScript</li>
+              <li>CSS</li>
+              <li>HTML</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </portfolio-screen>
+
+    <portfolio-screen screen-title="Coursework" screen-id="coursework">
+      <div class="content">
+        <h1>Relevant Coursework</h1>
+        <div class="coursework-grid">
+          <div class="coursework-card">
+            <h3>Security Risk Analysis </h3>
+          </div>
+          <div class="coursework-card">
+            <h3>Organization of Data</h3>
+          </div>
+          <div class="coursework-card">
+            <h3>Digital Networking</h3>
+          </div>
+          <div class="coursework-card">
+            <h3>Internet SecurityApplications</h3>
+          </div>
+        </div>
+      </div>
+    </portfolio-screen>
+
+    <!-- Contact Page -->
+    <portfolio-screen screen-title="Contact Me" screen-id="contact">
+      <div class="content">
+        <h1>Contact Me</h1>
+        <div class="contact-form">
+          <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+            <input type="hidden" name="_subject" value="New message from portfolio">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Message</button>
+          </form>
+          <div id="formResponse" class="form-response"></div>
+        </div>
+        <div class="social-links" style="margin-top: 2rem;">
+          <h3>Links</h3>
+          <a href="https://github.com/nickhadden23" class="social-icon">GitHub</a>
+          <a href="https://www.linkedin.com/in/nicholas-hadden-52773a343/" class="social-icon">LinkedIn</a>
+          <a href="https://vercel.com/nickhadden23s-projects" class="social-icon">Vercel</a>
+          <a href="files/Nick Resume.pdf" target="_blank">My Resume</a>
+        </div>
+      </div>
+    </portfolio-screen>
+  </portfolio-sidebar-theme>
+</body>
+</html>

@@ -6,6 +6,16 @@ export default defineConfig({
     open: true
   },
   build: {
-    target: 'esnext' 
+    target: 'esnext',
+    rollupOptions: {
+      input: {
+        main: './index.html'
+      }
+    }
+  },
+  optimizeDeps: {
+    include: [
+      '@webcomponents/webcomponentsjs/webcomponents-loader.js'
+    ]
   }
 })
