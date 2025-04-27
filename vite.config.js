@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import { resolve } from 'path'
 
 export default defineConfig({
   server: {
@@ -7,9 +8,11 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
+    outDir: 'dist',
+    emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: './index.html'
+        main: resolve(__dirname, 'index.html')
       }
     }
   },
