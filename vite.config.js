@@ -6,7 +6,7 @@ export default defineConfig({
     port: 3000,
     open: true
   },
-  base: '/', // Ensure base path is correct
+  base: process.env.NODE_ENV === 'production' ? '/' : '/',
   build: {
     target: 'esnext',
     outDir: 'dist',
@@ -14,19 +14,24 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html')
-      }
+      },
+      external: ['@webcomponents/webcomponentsjs/webcomponents-loader.js']
     },
-    // Add this to ensure assets are properly referenced
-    assetsInlineLimit: 0
+    minify: 'terser',
+    terserOptions: {
+      format: {
+        comments: false
+      }
+    }
   },
   optimizeDeps: {
     include: [
-      '@webcomponents/webcomponentsjs/webcomponents-loader.js',
       '@haxtheweb/d-d-d',
       '@haxtheweb/i18n-manager',
       '@haxtheweb/scroll-button',
       '@haxtheweb/simple-cta',
       'lit'
-    ]
+    ],
+    exclude: ['@webcomponents/webcomponentsjs']
   }
 })

@@ -6,14 +6,23 @@
       "use": "@vercel/static-build",
       "config": {
         "distDir": "dist",
-        "installCommand": "npm install --legacy-peer-deps"
+        "installCommand": "npm install --legacy-peer-deps",
+        "buildCommand": "npm run vercel-build",
+        "outputDirectory": "dist"
       }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/dist/$1"
+      "dest": "/dist/$1",
+      "headers": {
+        "Cache-Control": "s-maxage=31536000, immutable"
+      }
+    },
+    {
+      "src": "/",
+      "dest": "/dist/index.html"
     }
   ]
 }
