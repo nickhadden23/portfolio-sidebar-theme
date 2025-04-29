@@ -6,7 +6,7 @@ export default defineConfig({
     port: 3000,
     open: true
   },
-  base: '/', 
+  base: '/',
   build: {
     target: 'esnext',
     outDir: 'dist',
@@ -14,8 +14,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html')
-      },
-      external: ['@webcomponents/webcomponentsjs/webcomponents-loader.js']
+      }
     },
     minify: 'terser',
     terserOptions: {
