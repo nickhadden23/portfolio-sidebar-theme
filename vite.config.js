@@ -8,29 +8,12 @@ export default defineConfig({
   },
   base: '/',
   build: {
-    target: 'esnext',
     outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html')
       }
-    },
-    minify: 'terser',
-    terserOptions: {
-      format: {
-        comments: false
-      }
     }
-  },
-  optimizeDeps: {
-    include: [
-      '@haxtheweb/d-d-d',
-      '@haxtheweb/i18n-manager',
-      '@haxtheweb/scroll-button',
-      '@haxtheweb/simple-cta',
-      'lit'
-    ],
-    exclude: ['@webcomponents/webcomponentsjs']
   }
 })

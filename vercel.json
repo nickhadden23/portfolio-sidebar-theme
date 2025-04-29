@@ -13,10 +13,6 @@
   ],
   "routes": [
     {
-      "src": "/node_modules/(.*)",
-      "dest": "/dist/node_modules/$1"
-    },
-    {
       "src": "/(.*)",
       "dest": "/dist/$1"
     }
