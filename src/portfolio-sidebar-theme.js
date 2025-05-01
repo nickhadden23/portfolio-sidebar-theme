@@ -19,6 +19,13 @@ class PortfolioSidebarTheme extends LitElement {
     super();
     this.activeScreen = "about";
     this.scrolled = false;
+    this.screenOrder = {
+      about: 1,
+      projects: 2,
+      skills: 3,
+      coursework: 4,
+      contact: 5
+    };
     this.screens = [
       { id: "about", title: "About" },
       { id: "projects", title: "Projects" },
@@ -140,6 +147,39 @@ class PortfolioSidebarTheme extends LitElement {
     this.checkHash();
     this.setupIntersectionObserver();
     this.setupContactForm();
+    this.setupLabelClickHandlers();
+    this.enforceHashFormat();
+  }
+
+  enforceHashFormat() {
+    if (window.location.hash && !window.location.hash.startsWith('#/screen-')) {
+      const screenId = window.location.hash.substring(1);
+      if (this.screenOrder[screenId]) {
+        history.replaceState(null, null, this.getScreenHash(screenId));
+      }
+    }
+  }
+
+  getScreenNumber(screenId) {
+    return this.screenOrder[screenId] || 0;
+  }
+
+  getScreenHash(screenId) {
+    return `#/screen-${this.getScreenNumber(screenId)}`;
+  }
+
+  setupLabelClickHandlers() {
+    this.querySelectorAll('portfolio-screen label').forEach(label => {
+      label.addEventListener('click', (e) => {
+        const screen = e.target.closest('portfolio-screen');
+        if (screen) {
+          const screenId = screen.getAttribute('screen-id');
+          if (screenId) {
+            history.replaceState(null, null, this.getScreenHash(screenId));
+          }
+        }
+      });
+    });
   }
 
   handleScroll() {
@@ -156,8 +196,9 @@ class PortfolioSidebarTheme extends LitElement {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          this.activeScreen = entry.target.getAttribute("screen-id");
-          history.replaceState(null, null, `#${this.activeScreen}`);
+          const screenId = entry.target.getAttribute("screen-id");
+          this.activeScreen = screenId;
+          history.replaceState(null, null, this.getScreenHash(screenId));
         }
       });
     }, options);
@@ -170,7 +211,7 @@ class PortfolioSidebarTheme extends LitElement {
   setupScrollBehavior() {
     this.querySelectorAll("portfolio-screen").forEach((screen) => {
       screen.addEventListener("click", (e) => {
-        if (e.target.tagName === "A" && e.target.getAttribute("href").startsWith("#")) {
+        if (e.target.tagName === "A" && e.target.getAttribute("href")?.startsWith("#")) {
           e.preventDefault();
           const targetId = e.target.getAttribute("href").substring(1);
           this.scrollToScreen(targetId);
@@ -225,10 +266,26 @@ class PortfolioSidebarTheme extends LitElement {
 
   checkHash() {
     if (window.location.hash) {
-      const targetId = window.location.hash.substring(1);
-      setTimeout(() => {
-        this.scrollToScreen(targetId);
-      }, 100);
+      const hash = window.location.hash;
+      let targetId = '';
+      
+      if (hash.startsWith('#/screen-')) {
+        const screenNum = parseInt(hash.replace('#/screen-', ''));
+        targetId = Object.keys(this.screenOrder).find(
+          key => this.screenOrder[key] === screenNum
+        ) || 'about';
+      } else {
+        targetId = hash.substring(1);
+        if (this.screenOrder[targetId]) {
+          history.replaceState(null, null, this.getScreenHash(targetId));
+        }
+      }
+
+      if (targetId) {
+        setTimeout(() => {
+          this.scrollToScreen(targetId);
+        }, 100);
+      }
     }
   }
 
@@ -236,13 +293,14 @@ class PortfolioSidebarTheme extends LitElement {
     const screen = this.querySelector(`portfolio-screen[screen-id="${screenId}"]`);
     if (screen) {
       this.activeScreen = screenId;
-      history.replaceState(null, null, `#${screenId}`);
+      history.replaceState(null, null, this.getScreenHash(screenId));
       screen.scrollIntoView({ behavior: "smooth" });
     }
   }
 
   handleNavClick(e, screenId) {
     e.preventDefault();
+    history.replaceState(null, null, this.getScreenHash(screenId));
     this.scrollToScreen(screenId);
   }
 
@@ -256,7 +314,7 @@ class PortfolioSidebarTheme extends LitElement {
               (screen) => html`
                 <li class="nav-link">
                   <a
-                    href="#${screen.id}"
+                    href="${this.getScreenHash(screen.id)}"
                     class="${this.activeScreen === screen.id ? "active" : ""}"
                     @click="${(e) => this.handleNavClick(e, screen.id)}"
                     >${screen.title}</a
