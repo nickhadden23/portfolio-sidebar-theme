@@ -19,6 +19,11 @@ export class PortfolioScreen extends I18NMixin(DDD) {
         type: String, 
         attribute: 'screen-id',
         reflect: true
+      },
+      screenNumber: {
+        type: Number,
+        attribute: 'screen-number',
+        reflect: true
       }
     };
   }
@@ -27,28 +32,39 @@ export class PortfolioScreen extends I18NMixin(DDD) {
     super();
     this.screenTitle = "";
     this.screenId = "";
+    this.screenNumber = 0;
+  }
+
+  firstUpdated() {
+    this.applyScreenStyles();
   }
 
   updated(changedProperties) {
     super.updated(changedProperties);
-    if (changedProperties.has('screenId')) {
-      this.updateScreenColors();
+    if (changedProperties.has('screenNumber')) {
+      this.applyScreenStyles();
     }
   }
 
-  updateScreenColors() {
-    const colors = {
-      about: ['#6a11cb', '#2575fc'],
-      projects: ['#11998e', '#38ef7d'],
-      skills: ['#f46b45', '#eea849'],
-      coursework: ['#4568dc', '#b06ab3'], // Changed from experience to coursework
-      contact: ['#0575e6', '#021b79']
+  applyScreenStyles() {
+    const colorMap = {
+      1: '--ddd-theme-primary',
+      2: '--ddd-theme-secondary',
+      3: '--ddd-theme-tertiary', 
+      4: '--ddd-theme-quaternary',
+      5: '--ddd-theme-quinary'
     };
-    
-    if (colors[this.screenId]) {
-      this.style.setProperty('--screen-bg', colors[this.screenId][0]);
-      this.style.setProperty('--screen-bg-secondary', colors[this.screenId][1]);
-      this.style.setProperty('--screen-text', '#ffffff');
+
+    if (this.screenNumber && colorMap[this.screenNumber]) {
+      this.style.cssText = `
+        background-color: var(${colorMap[this.screenNumber]}) !important;
+        color: var(--ddd-theme-default-emailFont) !important;
+        background-image: linear-gradient(
+          to bottom right,
+          var(${colorMap[this.screenNumber]}),
+          var(--ddd-theme-default-emailBackground)
+        ) !important;
+      `;
     }
   }
 
@@ -58,34 +74,30 @@ export class PortfolioScreen extends I18NMixin(DDD) {
       css`
         :host {
           display: block;
-          min-height: 100vh;
-          padding: 2rem;
+          height: 100vh;
+          width: 100%;
+          padding: 0;
+          margin: 0;
           box-sizing: border-box;
-          background: linear-gradient(135deg, var(--screen-bg, #6a11cb) 0%, var(--screen-bg-secondary, #2575fc) 100%);
-          color: var(--screen-text, white);
-          transition: all 0.3s ease;
           scroll-snap-align: start;
-        }
-
-        .content {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 2rem;
+          transition: background-color 0.5s ease;
         }
 
         h1 {
           font-size: 3rem;
           margin-bottom: 2rem;
-          text-align: center;
-          font-weight: 700;
-          text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+          text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
         }
 
-        .profile-section {
+        .content-wrapper {
           display: flex;
+          flex-direction: column;
+          justify-content: center;
           align-items: center;
-          gap: 2rem;
-          margin-bottom: 2rem;
+          height: 100%;
+          padding: 2rem;
+          box-sizing: border-box;
+          text-align: center;
         }
 
         .profile-image {
@@ -94,76 +106,81 @@ export class PortfolioScreen extends I18NMixin(DDD) {
           border-radius: 50%;
           object-fit: cover;
           border: 5px solid white;
-          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .projects-list {
           display: flex;
           flex-direction: column;
           gap: 1.5rem;
+          max-width: 800px;
+          margin: 0 auto;
         }
 
         .project-link {
-          color: inherit;
+          color: white;
           text-decoration: none;
-          transition: all 0.2s ease;
+          font-weight: bold;
+          transition: all 0.3s ease;
         }
 
         .project-link:hover {
+          color: #ffd700;
           text-decoration: underline;
         }
 
         .skills-container {
           display: flex;
-          gap: 2rem;
           justify-content: center;
-        }
-
-        .skills-column {
-          flex: 1;
-          max-width: 400px;
         }
 
         .skills-list {
           list-style-type: none;
           padding: 0;
+          text-align: left;
         }
 
         .skills-list li {
-          padding: 0.5rem 0;
-          border-bottom: 1px solid rgba(255,255,255,0.1);
+          padding: 0.75rem;
+          background: rgba(255, 255, 255, 0.1);
+          margin: 0.5rem 0;
+          border-radius: 4px;
+          transition: all 0.3s ease;
+        }
+
+        .skills-list li:hover {
+          background: rgba(255, 255, 255, 0.2);
+          transform: translateX(5px);
         }
 
         .coursework-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
           gap: 1.5rem;
-          max-width: 1000px;
+          max-width: 800px;
           margin: 0 auto;
         }
 
         .coursework-card {
-          background: rgba(255,255,255,0.1);
+          background: rgba(255, 255, 255, 0.1);
           padding: 1.5rem;
           border-radius: 8px;
+          backdrop-filter: blur(5px);
           transition: all 0.3s ease;
         }
 
         .coursework-card:hover {
+          background: rgba(255, 255, 255, 0.2);
           transform: translateY(-5px);
-          box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .coursework-card h3 {
-          margin-top: 0;
-          color: white;
-          border-bottom: 2px solid rgba(255,255,255,0.2);
-          padding-bottom: 0.5rem;
         }
 
         .contact-form {
-          max-width: 600px;
+          max-width: 500px;
           margin: 0 auto;
+          background: rgba(255, 255, 255, 0.1);
+          padding: 2rem;
+          border-radius: 8px;
+          backdrop-filter: blur(5px);
         }
 
         .form-group {
@@ -173,6 +190,7 @@ export class PortfolioScreen extends I18NMixin(DDD) {
         label {
           display: block;
           margin-bottom: 0.5rem;
+          font-weight: bold;
         }
 
         input, textarea {
@@ -180,69 +198,58 @@ export class PortfolioScreen extends I18NMixin(DDD) {
           padding: 0.75rem;
           border: none;
           border-radius: 4px;
-          background: rgba(255,255,255,0.9);
+          background: rgba(255, 255, 255, 0.9);
         }
 
         .submit-btn {
           background: white;
-          color: var(--screen-bg);
+          color: #001e44;
           padding: 0.75rem 1.5rem;
           border: none;
           border-radius: 4px;
           cursor: pointer;
           font-weight: bold;
-          transition: all 0.2s ease;
+          transition: all 0.3s ease;
         }
 
         .submit-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+          background: #ffd700;
+          transform: scale(1.05);
         }
 
         .social-links {
           display: flex;
           flex-direction: column;
-          gap: 0.75rem;
+          align-items: center;
           margin-top: 2rem;
-        }
-
-        .social-links h3 {
-          margin-bottom: 0.5rem;
-          font-size: 1.25rem;
+          gap: 0.5rem;
         }
 
         .social-links a {
-          color: inherit;
+          color: white;
           text-decoration: none;
-          padding: 0.5rem 0;
-          transition: all 0.2s ease;
-          display: block;
+          padding: 0.5rem 1rem;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 4px;
+          transition: all 0.3s ease;
         }
 
         .social-links a:hover {
-          text-decoration: underline;
-          transform: translateX(5px);
+          background: rgba(255, 255, 255, 0.3);
+          color: #ffd700;
         }
 
         @media (max-width: 768px) {
-          .content {
-            padding: 1rem;
-          }
-          
           h1 {
             font-size: 2rem;
           }
-
-          .profile-section {
-            flex-direction: column;
-          }
-
-          .skills-container {
-            flex-direction: column;
-          }
-
+          
           .coursework-grid {
             grid-template-columns: 1fr;
+          }
+          
+          .content-wrapper {
+            padding: 1rem;
           }
         }
       `
@@ -251,8 +258,7 @@ export class PortfolioScreen extends I18NMixin(DDD) {
 
   render() {
     return html`
-      <div class="content" id="${this.screenId}">
-        ${this.screenTitle ? html`<h1>${this.screenTitle}</h1>` : ''}
+      <div class="content-wrapper">
         <slot></slot>
       </div>
     `;

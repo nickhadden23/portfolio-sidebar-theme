@@ -2,38 +2,75 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>My Portfolio</title>
   <script type="module" src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script type="module" src="/node_modules/@haxtheweb/d-d-d/d-d-d.js"></script>
+  <script type="module" src="/src/portfolio-screen.js"></script>
   <script type="module" src="/src/portfolio-sidebar-theme.js"></script>
   <style>
-    body {
+    :root, html, body {
       margin: 0;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      scroll-behavior: smooth;
+      padding: 0;
+      overflow-x: hidden;
+      height: 100%;
+      --ddd-theme-primary: #5b26d6;       
+      --ddd-theme-secondary: #bd2592;    
+      --ddd-theme-tertiary: #e7601d;      
+      --ddd-theme-quaternary: #1a1f61;    
+      --ddd-theme-quinary: #F8F9FA;       
+      --ddd-theme-default-emailFont: white;
+      --ddd-theme-default-emailBackground: #0d2b4e;
+    }
+    
+    body {
+      overflow-y: auto;
+      font-family: var(--ddd-font-navigation);
+    }
+    
+    .profile-image {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 5px solid var(--ddd-theme-primary);
+    }
+    
+    .content-wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 2rem;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    
+    @media (max-width: 768px) {
+      .content-wrapper {
+        padding: 1rem;
+      }
     }
   </style>
 </head>
 <body>
   <portfolio-sidebar-theme>
     <!-- About Page -->
-    <portfolio-screen screen-title="About Me" screen-id="about">
-      <div class="content">
+    <portfolio-screen class="about" screen-title="About Me" screen-id="about" screen-number="1">
+      <div class="content-wrapper">
         <h1>About Me</h1>
         <div class="profile-section">
           <h2>Nick Hadden</h2>
           <img src="https://via.placeholder.com/200" alt="Profile picture" class="profile-image">
           <p>Rising Junior and cybersecurity major at Penn State University.</p>
-          <div class="profile-info">
-            <p class="tagline"></p>
-          </div>
         </div>
       </div>
     </portfolio-screen>
 
     <!-- Projects Page -->
-    <portfolio-screen screen-title="My Projects" screen-id="projects">
-      <div class="content">
+    <portfolio-screen class="projects" screen-title="My Projects" screen-id="projects" screen-number="2">
+      <div class="content-wrapper">
         <h1>My Projects</h1>
         <div class="projects-list">
           <h3><a href="https://github.com/nickhadden23/polaris-chip" class="project-link">Polars-Chip</a></h3>
@@ -46,8 +83,8 @@
     </portfolio-screen>
 
     <!-- Skills Page -->
-    <portfolio-screen screen-title="My Skills" screen-id="skills">
-      <div class="content">
+    <portfolio-screen class="skills" screen-title="My Skills" screen-id="skills" screen-number="3">
+      <div class="content-wrapper">
         <h1>My Skills</h1>
         <div class="skills-container">
           <div class="skills-column">
@@ -63,12 +100,13 @@
       </div>
     </portfolio-screen>
 
-    <portfolio-screen screen-title="Coursework" screen-id="coursework">
-      <div class="content">
+    <!-- Coursework Page -->
+    <portfolio-screen class="coursework" screen-title="Coursework" screen-id="coursework" screen-number="4">
+      <div class="content-wrapper">
         <h1>Relevant Coursework</h1>
         <div class="coursework-grid">
           <div class="coursework-card">
-            <h3>Security Risk Analysis </h3>
+            <h3>Security Risk Analysis</h3>
           </div>
           <div class="coursework-card">
             <h3>Organization of Data</h3>
@@ -77,15 +115,15 @@
             <h3>Digital Networking</h3>
           </div>
           <div class="coursework-card">
-            <h3>Internet SecurityApplications</h3>
+            <h3>Internet Security Applications</h3>
           </div>
         </div>
       </div>
     </portfolio-screen>
 
     <!-- Contact Page -->
-    <portfolio-screen screen-title="Contact Me" screen-id="contact">
-      <div class="content">
+    <portfolio-screen class="contact" screen-title="Contact Me" screen-id="contact" screen-number="5">
+      <div class="content-wrapper">
         <h1>Contact Me</h1>
         <div class="contact-form">
           <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
@@ -106,7 +144,7 @@
           </form>
           <div id="formResponse" class="form-response"></div>
         </div>
-        <div class="social-links" style="margin-top: 2rem;">
+        <div class="social-links">
           <h3>Links</h3>
           <a href="https://github.com/nickhadden23" class="social-icon">GitHub</a>
           <a href="https://www.linkedin.com/in/nicholas-hadden-52773a343/" class="social-icon">LinkedIn</a>
